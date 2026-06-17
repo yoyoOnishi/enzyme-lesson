@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>発酵食品はなぜおいしいのか？ — 酵素の働き</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { -webkit-tap-highlight-color: transparent; }
+
+/* ===== 色設計 (WCAG AA 準拠) ===== */
+:root {
+  --bg:        #f4f6fb;
+  --card:      #ffffff;
+  --card2:     #eef1ff;
+  --border:    #c8cfe8;
+  --text:      #111111;
+  --text2:     #444444;
+  --text3:     #666666;
+  --blue:      #1d4ed8;
+  --blue-bg:   #dbeafe;
+  --orange:    #b45309;
+  --orange-bg: #fef3c7;
+  --green:     #166534;
+  --green-bg:  #dcfce7;
+  --pink:      #9d174d;
+  --pink-bg:   #fce7f3;
+  --red:       #991b1b;
+  --red-bg:    #fee2e2;
+  --purple:    #5b21b6;
+  --purple-bg: #ede9fe;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #141414;
+    --card:      #222222;
+    --card2:     #2a2a2a;
+    --border:    #404040;
+    --text:      #f0f0f0;
+    --text2:     #c0c0c0;
+    --text3:     #a0a0a0;
+    --blue:      #93c5fd;
+    --blue-bg:   #1e3a5f;
+    --orange:    #fcd34d;
+    --orange-bg: #422006;
+    --green:     #86efac;
+    --green-bg:  #052e16;
+    --pink:      #f9a8d4;
+    --pink-bg:   #4a0d25;
+    --red:       #fca5a5;
+    --red-bg:    #450a0a;
+    --purple:    #c4b5fd;
+    --purple-bg: #2e1065;
+  }
+}
+
+html, body {
+  width: 100%; height: 100%;
+  font-family: -apple-system, "Hiragino Sans", "Yu Gothic", "Helvetica Neue", sans-serif;
+  background: #000;
+  -webkit-text-size-adjust: 100%;
+}
+
+#wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+#dots {
+  position: absolute;
+  top: 12px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 7px; z-index: 100;
+  pointer-events: none;
+}
+.dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--border); transition: all 0.25s;
+}
+.dot.active { background: var(--blue); transform: scale(1.35); }
+
+#deck {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: clamp(12px,2.5vw,40px) clamp(16px,3.5vw,56px);
+  padding-bottom: clamp(8px,1.5vw,24px);
+  padding-top: clamp(28px,4vw,52px);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s;
+  pointer-events: none;
+  overflow-y: auto;
+  background: var(--bg);
+  -webkit-overflow-scrolling: touch;
+}
+.slide.active {
+  opacity: 1; transform: translateX(0); pointer-events: all;
+}
+.slide.exit-l {
+  opacity: 0; transform: translateX(-100%);
+}
+
+#nav {
+  position: relative;
+  flex-shrink: 0;
+  height: clamp(52px,7vh,68px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(12px,2.5vw,36px);
+  background: var(--card);
+  border-top: 2px solid var(--border);
+  z-index: 100;
+}
+.nav-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--card2); border: 2px solid var(--border);
+  color: var(--text); border-radius: 10px;
+  min-width: clamp(80px,12vw,130px);
+  justify-content: center;
+  padding: clamp(8px,1.4vh,14px) clamp(14px,2.2vw,26px);
+  font-size: clamp(14px,1.8vw,18px); font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: opacity 0.1s;
+}
+.nav-btn:active  { opacity: 0.7; }
+.nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+.nav-btn.next {
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+@media (prefers-color-scheme: dark) { .nav-btn.next { color: #111; } }
+.nav-btn.next:active { opacity: 0.8; }
+
+#slide-counter {
+  font-size: clamp(13px,1.7vw,16px);
+  color: var(--text); font-weight: 700; letter-spacing: 0.06em;
+}
+
+/* ===== 共通コンポーネント ===== */
+.slide-title {
+  font-size: clamp(18px,2.8vw,36px); font-weight: 900;
+  text-align: center; line-height: 1.2;
+  margin-bottom: clamp(5px,1vh,13px); color: var(--text);
+}
+.slide-sub {
+  font-size: clamp(12px,1.6vw,17px); color: var(--text2);
+  text-align: center; margin-bottom: clamp(8px,1.5vh,18px);
+  line-height: 1.5; font-weight: 500;
+}
+.info-box {
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 12px; padding: clamp(8px,1.2vw,14px) clamp(12px,1.8vw,20px);
+  font-size: clamp(11px,1.4vw,14px); color: var(--text2);
+  line-height: 1.6; max-width: 640px; width: 100%; text-align: center;
+}
+.info-box strong { color: var(--blue); }
+
+@keyframes floatY {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+/* ===== S1: タイトル ===== */
+.s1-title {
+  font-size: clamp(24px,3.8vw,50px); font-weight: 900;
+  text-align: center; line-height: 1.15; color: var(--text);
+  margin-bottom: clamp(6px,1vh,14px);
+}
+.s1-title em { color: var(--blue); font-style: normal; }
+.food-row {
+  display: flex; gap: clamp(12px,2.2vw,32px);
+  justify-content: center; margin: clamp(10px,1.8vh,24px) 0;
+}
+.food-item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  animation: floatY 3s ease-in-out infinite;
+}
+.food-item:nth-child(2){ animation-delay:.5s; }
+.food-item:nth-child(3){ animation-delay:1s; }
+.food-item:nth-child(4){ animation-delay:1.5s; }
+.food-em  { font-size: clamp(30px,5.5vw,58px); line-height: 1; }
+.food-lbl { font-size: clamp(12px,1.5vw,17px); font-weight: 700; color: var(--text2); }
+
+/* ===== S2: 問い ===== */
+.ing-row {
+  display: flex; align-items: center; gap: clamp(7px,1.3vw,18px);
+  justify-content: center; flex-wrap: wrap;
+  margin: clamp(8px,1.5vh,18px) 0;
+}
+.ing-box {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: clamp(9px,1.3vw,16px);
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 12px; min-width: clamp(68px,9vw,100px);
+}
+.ing-em  { font-size: clamp(26px,4vw,44px); }
+.ing-lbl { font-size: clamp(12px,1.4vw,15px); font-weight: 700; }
+.plus { font-size: clamp(20px,2.5vw,30px); color: var(--text3); }
+.big-arrow { font-size: clamp(20px,2.5vw,28px); color: var(--orange); margin: 3px 0; }
+.q-box {
+  background: var(--blue-bg); border: 2.5px solid var(--blue);
+  border-radius: 16px; padding: clamp(12px,1.8vw,22px) clamp(16px,2.5vw,32px);
+  text-align: center; max-width: 560px;
+}
+.q-text {
+  font-size: clamp(14px,1.9vw,21px); font-weight: 800;
+  line-height: 1.4; color: var(--blue);
+}
+.q-hint {
+  margin-top: clamp(7px,1vh,12px); font-size: clamp(12px,1.5vw,15px);
+  color: var(--text2); text-align: center; font-weight: 500;
+}
+
+/* ===== S3: 酵素と発酵の違い ===== */
+.concept-wrap {
+  display: flex; gap: clamp(12px,2vw,22px); width: 100%; max-width: 760px;
+  justify-content: center; margin-bottom: clamp(10px,1.5vh,16px);
+}
+.concept-card {
+  flex: 1; background: var(--card); border: 2.5px solid var(--border);
+  border-radius: 14px; padding: clamp(12px,1.8vw,20px);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  max-width: 340px;
+}
+.concept-icon { font-size: clamp(26px,4vw,42px); }
+.concept-title { font-size: clamp(15px,2vw,22px); font-weight: 900; }
+.concept-keyword {
+  font-size: clamp(11px,1.3vw,14px); font-weight: 800;
+  padding: 2px 10px; border-radius: 20px; margin-bottom: 2px;
+}
+.concept-def { font-size: clamp(11px,1.4vw,14px); color: var(--text2); text-align: center; line-height: 1.55; font-weight: 500; }
+.concept-card.blue { border-color: var(--blue); background: var(--blue-bg); }
+.concept-card.blue .concept-title { color: var(--blue); }
+.concept-card.blue .concept-keyword { background: var(--blue); color: #fff; }
+.concept-card.green { border-color: var(--green); background: var(--green-bg); }
+.concept-card.green .concept-title { color: var(--green); }
+.concept-card.green .concept-keyword { background: var(--green); color: #fff; }
+@media (prefers-color-scheme: dark) {
+  .concept-card.blue .concept-keyword,
+  .concept-card.green .concept-keyword { color: #111; }
+}
+.rel-flow {
+  display: flex; align-items: center; gap: clamp(5px,0.8vw,10px);
+  flex-wrap: nowrap; justify-content: center;
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 14px; padding: clamp(10px,1.5vw,16px) clamp(14px,2vw,24px);
+  max-width: 720px; width: 100%;
+}
+.rel-node {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: clamp(7px,1vw,11px) clamp(9px,1.3vw,14px);
+  border-radius: 10px; border: 2px solid; flex-shrink: 0;
+}
+.rel-node-em { font-size: clamp(18px,2.6vw,30px); }
+.rel-node-lbl { font-size: clamp(10px,1.3vw,14px); font-weight: 800; white-space: nowrap; }
+.rel-arrow { font-size: clamp(14px,1.8vw,22px); color: var(--text3); flex-shrink: 0; }
+
+/* ===== S4 & S5: 反応フロー ===== */
+.rx-flow {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 560px;
+}
+.rx-step {
+  display: flex; flex-direction: column; align-items: center;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.rx-step.vis { opacity: 1; transform: translateY(0); }
+.mol-box {
+  display: flex; align-items: center; gap: clamp(9px,1.4vw,16px);
+  padding: clamp(9px,1.4vw,16px) clamp(14px,2.2vw,26px);
+  border-radius: 12px; width: clamp(220px,48vw,440px); border: 2.5px solid;
+}
+.mol-em  { font-size: clamp(24px,3.5vw,40px); }
+.mol-lbl { font-size: clamp(13px,1.8vw,20px); font-weight: 800; }
+.mol-sub { font-size: clamp(10px,1.2vw,13px); color: var(--text2); margin-top: 2px; font-weight: 500; }
+.mol-protein { background: var(--pink-bg);   border-color: var(--pink); }
+.mol-protein .mol-lbl { color: var(--pink); }
+.mol-peptide { background: var(--purple-bg); border-color: var(--purple); }
+.mol-peptide .mol-lbl { color: var(--purple); }
+.mol-amino   { background: var(--green-bg);  border-color: var(--green); }
+.mol-amino .mol-lbl   { color: var(--green); }
+.mol-starch  { background: var(--blue-bg);   border-color: var(--blue); }
+.mol-starch .mol-lbl  { color: var(--blue); }
+.mol-dextrin { background: var(--purple-bg); border-color: var(--purple); }
+.mol-dextrin .mol-lbl { color: var(--purple); }
+.mol-sugar   { background: var(--orange-bg); border-color: var(--orange); }
+.mol-sugar .mol-lbl   { color: var(--orange); }
+.enz-row {
+  display: flex; align-items: center; gap: clamp(5px,0.9vw,10px);
+  padding: clamp(3px,0.5vh,6px) 0;
+}
+.enz-line { flex:1; max-width: clamp(24px,4vw,52px); height: 2px; background: var(--border); }
+.enz-badge {
+  background: var(--blue); color: #fff;
+  border-radius: 16px; padding: clamp(3px,0.5vh,6px) clamp(9px,1.3vw,16px);
+  font-size: clamp(10px,1.3vw,14px); font-weight: 800; white-space: nowrap;
+}
+@media (prefers-color-scheme: dark) { .enz-badge { color: #111; } }
+.enz-sub { font-size: clamp(10px,1.1vw,12px); color: var(--text3); text-align: center; font-weight: 500; }
+.taste-badge {
+  margin-top: clamp(6px,1vh,10px);
+  padding: clamp(4px,0.8vh,9px) clamp(12px,1.8vw,22px);
+  border-radius: 20px; font-size: clamp(12px,1.6vw,18px); font-weight: 800;
+}
+.taste-umami { background: var(--pink);   color: #fff; }
+.taste-sweet { background: var(--orange); color: #fff; }
+@media (prefers-color-scheme: dark) {
+  .taste-umami, .taste-sweet { color: #111; }
+}
+
+/* ===== S6: なぜおいしくなるのか ===== */
+.taste-intro {
+  display: flex; align-items: center; gap: clamp(8px,1.2vw,14px);
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 12px; padding: clamp(9px,1.3vw,14px) clamp(14px,2vw,22px);
+  max-width: 680px; width: 100%;
+  margin-bottom: clamp(10px,1.5vh,16px);
+  font-size: clamp(13px,1.7vw,18px); font-weight: 700;
+  flex-wrap: wrap; justify-content: center; text-align: center;
+}
+.taste-intro span { color: var(--blue); font-weight: 900; }
+.taste-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(9px,1.3vw,14px); width: 100%; max-width: 680px;
+  margin-bottom: clamp(9px,1.3vh,14px);
+}
+.taste-card {
+  background: var(--card); border: 2.5px solid var(--border);
+  border-radius: 12px; padding: clamp(10px,1.4vw,16px);
+  display: flex; align-items: flex-start; gap: 9px;
+}
+.t-icon { font-size: clamp(22px,3vw,34px); flex-shrink: 0; }
+.t-body { display: flex; flex-direction: column; gap: 3px; }
+.t-name { font-size: clamp(13px,1.7vw,18px); font-weight: 900; }
+.t-chem { font-size: clamp(10px,1.2vw,13px); color: var(--text2); font-weight: 700; margin-top: 1px; }
+.t-ex   { font-size: clamp(10px,1.2vw,12px); color: var(--text3); font-weight: 500; line-height: 1.45; }
+.taste-card.umami { border-color: var(--pink);   }
+.taste-card.umami .t-name { color: var(--pink); }
+.taste-card.sweet { border-color: var(--orange); }
+.taste-card.sweet .t-name { color: var(--orange); }
+.taste-card.sour  { border-color: var(--blue);   }
+.taste-card.sour  .t-name { color: var(--blue); }
+.taste-card.aroma { border-color: var(--green);  }
+.taste-card.aroma .t-name { color: var(--green); }
+
+/* ===== S7: 牛乳 → 分岐 ===== */
+.milk-src {
+  display: flex; align-items: center; gap: clamp(9px,1.3vw,15px);
+  background: var(--card); border: 2.5px solid var(--border);
+  border-radius: 14px; padding: clamp(9px,1.3vw,14px) clamp(16px,2.5vw,28px);
+  width: 100%; max-width: 360px;
+}
+.milk-src-em  { font-size: clamp(28px,4.5vw,46px); }
+.milk-src-ttl { font-size: clamp(16px,2.2vw,24px); font-weight: 900; }
+.milk-src-sub { font-size: clamp(11px,1.3vw,14px); color: var(--text2); font-weight: 500; margin-top: 1px; }
+.branch-wrap {
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: clamp(8px,1.5vw,16px); width: 100%; max-width: 820px;
+  margin-top: clamp(4px,0.7vh,8px);
+}
+.branch-col { display: flex; flex-direction: column; align-items: center; flex: 1; max-width: 390px; }
+.branch-down { display: flex; flex-direction: column; align-items: center; padding-bottom: 3px; }
+.branch-vline { width: 2px; height: clamp(14px,2vh,28px); }
+.branch-head  { font-size: 14px; line-height: 1; }
+.branch-enz {
+  border-radius: 9px; padding: 3px 10px;
+  font-size: clamp(10px,1.1vw,12px); font-weight: 700;
+  margin-bottom: 3px; text-align: center; border: 1.5px solid;
+}
+.prod-card {
+  background: var(--card); border: 2.5px solid var(--border);
+  border-radius: 14px; padding: clamp(9px,1.3vw,14px); width: 100%;
+}
+.prod-hdr {
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+  padding-bottom: clamp(5px,0.8vh,9px); margin-bottom: clamp(5px,0.8vh,9px);
+  border-bottom: 1.5px solid var(--border);
+}
+.prod-em   { font-size: clamp(22px,3.5vw,38px); }
+.prod-name { font-size: clamp(14px,2vw,20px); font-weight: 900; }
+.state-badge {
+  font-size: clamp(10px,1.1vw,12px); font-weight: 800;
+  padding: 1px 8px; border-radius: 7px; margin-left: 3px;
+}
+.chg {
+  display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;
+  margin: clamp(3px,0.5vh,5px) 0; font-size: clamp(11px,1.3vw,13px);
+}
+.chg-from  { color: var(--text); font-weight: 600; }
+.chg-arrow { color: var(--orange); font-weight: 900; flex-shrink: 0; }
+.chg-to    { font-weight: 800; }
+.chg-note  { font-size: clamp(10px,1.1vw,12px); color: var(--text2); margin-left: 4px; font-weight: 500; }
+.chg-main  { background: var(--orange-bg); border-left: 3px solid var(--orange); padding-left: 5px; border-radius: 0 5px 5px 0; margin-bottom: 2px !important; }
+.chg-main-green { background: var(--green-bg); border-left: 3px solid var(--green); padding-left: 5px; border-radius: 0 5px 5px 0; }
+.microbe-row {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 7px; padding: 4px 9px;
+  font-size: clamp(10px,1.2vw,12px); margin-top: 7px;
+  color: var(--text); font-weight: 500;
+}
+.diff-note {
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 10px; padding: clamp(7px,1vh,11px) clamp(12px,1.8vw,20px);
+  font-size: clamp(11px,1.4vw,14px); font-weight: 600; color: var(--text2);
+  text-align: center; max-width: 820px; width: 100%;
+  margin-top: clamp(6px,1vh,11px);
+}
+.diff-note strong { color: var(--text); }
+
+/* ===== S7: チーズとヨーグルト比較パネル ===== */
+.mech-compare {
+  display: flex; align-items: stretch; gap: clamp(7px,1.1vw,13px);
+  width: 100%; max-width: 820px;
+  margin-top: clamp(6px,1vh,12px);
+}
+.mech-vs {
+  font-size: clamp(13px,1.8vw,20px); font-weight: 900; color: var(--text3);
+  align-self: center; flex-shrink: 0; padding: 0 2px;
+}
+.mech-panel {
+  flex: 1; border: 2.5px solid; border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.mech-panel-hdr {
+  padding: clamp(7px,1.1vh,12px) clamp(12px,1.8vw,18px);
+  font-size: clamp(13px,1.8vw,19px); font-weight: 900;
+  text-align: center; border-bottom: 1.5px solid;
+}
+.mech-panel-key {
+  padding: clamp(5px,0.8vh,9px) clamp(12px,1.8vw,18px);
+  font-size: clamp(12px,1.5vw,16px); font-weight: 800;
+  text-align: center; border-bottom: 1.5px solid;
+  letter-spacing: 0.01em;
+}
+.mech-panel-flow {
+  padding: clamp(8px,1.1vh,13px) clamp(12px,1.8vw,16px);
+  background: var(--card); flex: 1;
+  display: flex; flex-direction: column; gap: 1px;
+}
+.mech-step-lbl {
+  font-size: clamp(11px,1.3vw,14px); font-weight: 700; color: var(--text);
+  padding: clamp(3px,0.5vh,5px) 0;
+}
+.mech-step-arrow {
+  font-size: clamp(10px,1.1vw,12px); color: var(--text3);
+  padding: 0 0 0 8px; font-weight: 600; line-height: 1.5;
+}
+.mech-step-arrow::before { content: '↓ '; }
+.mech-result-lbl {
+  font-weight: 900; padding: clamp(4px,0.6vh,7px) clamp(8px,1.2vw,12px);
+  border-radius: 7px; text-align: center; margin-top: clamp(5px,0.8vh,9px);
+  font-size: clamp(12px,1.5vw,15px);
+}
+.mech-note {
+  margin-top: clamp(5px,0.8vh,9px);
+  font-size: clamp(10px,1.1vw,12px); color: var(--text2); font-weight: 500;
+  line-height: 1.5; text-align: center;
+}
+.mech-panel-footer {
+  padding: clamp(5px,0.7vh,8px) clamp(12px,1.8vw,16px);
+  font-size: clamp(9px,1.1vw,12px); font-weight: 500;
+  color: var(--text2); border-top: 1.5px solid; text-align: center;
+  line-height: 1.45;
+}
+.mech-panel.cheese { border-color: var(--orange); }
+.mech-panel.cheese .mech-panel-hdr { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+.mech-panel.cheese .mech-panel-key { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+.mech-panel.cheese .mech-result-lbl { background: var(--orange-bg); color: var(--orange); }
+.mech-panel.cheese .mech-panel-footer { border-color: var(--orange); }
+.mech-panel.yogurt { border-color: var(--green); }
+.mech-panel.yogurt .mech-panel-hdr { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+.mech-panel.yogurt .mech-panel-key { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+.mech-panel.yogurt .mech-result-lbl { background: var(--green-bg); color: var(--green); }
+.mech-panel.yogurt .mech-panel-footer { border-color: var(--green); }
+
+/* ===== S8: 納豆 ===== */
+.natto-foods {
+  display: flex; gap: clamp(10px,1.5vw,18px); justify-content: center;
+  flex-wrap: wrap; margin-top: clamp(8px,1.2vh,14px);
+}
+.natto-food-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 20px; padding: clamp(5px,0.8vh,9px) clamp(10px,1.5vw,16px);
+  font-size: clamp(12px,1.6vw,17px); font-weight: 700;
+}
+
+/* ===== S9: 投票 ===== */
+.poll-q {
+  font-size: clamp(15px,2.2vw,26px); font-weight: 800;
+  text-align: center; margin-bottom: clamp(12px,1.8vh,22px);
+  line-height: 1.35; max-width: 600px; color: var(--text);
+}
+.poll-q em { color: var(--blue); font-style: normal; }
+.poll-btns { display: flex; gap: clamp(12px,1.8vw,24px); justify-content: center; flex-wrap: wrap; }
+.poll-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: clamp(12px,1.8vw,20px) clamp(24px,3.5vw,44px);
+  border-radius: 16px; font-size: clamp(16px,2.2vw,26px); font-weight: 800;
+  cursor: pointer; border: 3px solid;
+  user-select: none;
+  touch-action: manipulation;
+  background: var(--card); transition: opacity 0.1s;
+}
+.poll-btn:active { opacity: 0.7; }
+.poll-btn .bem  { font-size: clamp(28px,4vw,48px); }
+.poll-btn.yum  { border-color: var(--green); color: var(--green); }
+.poll-btn.nope { border-color: var(--red);   color: var(--red); }
+.poll-btn.yum.sel  { background: var(--green-bg); }
+.poll-btn.nope.sel { background: var(--red-bg); }
+.poll-res {
+  width: 100%; max-width: 500px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none; margin-top: clamp(10px,1.5vh,20px);
+}
+.poll-res.show { opacity: 1; transform: translateY(0); }
+.res-row   { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+.res-lbl   { width: clamp(58px,8vw,84px); font-size: clamp(12px,1.5vw,15px); font-weight: 700; color: var(--text); }
+.res-track { flex: 1; background: var(--card2); border: 1.5px solid var(--border); border-radius: 7px; height: clamp(20px,3vh,30px); overflow: hidden; }
+.res-bar   { height: 100%; border-radius: 6px; width: 0%; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+.res-bar.yum-bar  { background: var(--green); }
+.res-bar.nope-bar { background: var(--red); }
+.res-pct   { font-size: clamp(13px,1.7vw,17px); font-weight: 800; min-width: 42px; color: var(--text); }
+.poll-note {
+  margin-top: clamp(9px,1.3vh,16px); font-size: clamp(12px,1.5vw,15px);
+  color: var(--text2); text-align: center; max-width: 480px; line-height: 1.6; font-weight: 500;
+}
+.poll-note strong { color: var(--text); }
+
+/* ===== S10: まとめ（因果連鎖） ===== */
+.sum-chain {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 520px;
+}
+.chain-node {
+  display: flex; align-items: center; gap: clamp(9px,1.3vw,14px);
+  background: var(--card); border: 2.5px solid var(--border);
+  border-radius: 12px; padding: clamp(9px,1.3vw,13px) clamp(14px,2vw,20px);
+  width: 100%;
+}
+.chain-icon { font-size: clamp(20px,2.8vw,32px); flex-shrink: 0; }
+.chain-body { display: flex; flex-direction: column; gap: 2px; }
+.chain-main { font-size: clamp(13px,1.8vw,19px); font-weight: 800; color: var(--text); }
+.chain-sub  { font-size: clamp(10px,1.2vw,13px); color: var(--text2); font-weight: 500; }
+.chain-conn {
+  width: 2px; height: clamp(16px,2.2vh,28px);
+  background: linear-gradient(to bottom, var(--blue), var(--orange));
+  position: relative; flex-shrink: 0;
+}
+.chain-conn::after {
+  content: '▼'; position: absolute; bottom: -3px;
+  left: 50%; transform: translateX(-50%);
+  color: var(--orange); font-size: 10px;
+}
+.chain-node.node-blue   { border-color: var(--blue);   background: var(--blue-bg); }
+.chain-node.node-blue .chain-main { color: var(--blue); }
+.chain-node.node-orange { border-color: var(--orange); background: var(--orange-bg); }
+.chain-node.node-orange .chain-main { color: var(--orange); }
+.chain-node.node-green  { border-color: var(--green);  background: var(--green-bg); }
+.chain-node.node-green .chain-main { color: var(--green); }
+.chain-node.node-pink   { border-color: var(--pink);   background: var(--pink-bg); }
+.chain-node.node-pink .chain-main { color: var(--pink); }
+.chain-node.node-purple { border-color: var(--purple); background: var(--purple-bg); }
+.chain-node.node-purple .chain-main { color: var(--purple); }
+
+@media (max-width: 600px) {
+  .concept-wrap { flex-direction: column; align-items: center; }
+  .branch-wrap  { flex-direction: column; align-items: center; }
+  .branch-col   { max-width: 100%; }
+  .taste-grid   { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="wrapper">
+
+  <div id="dots"></div>
+
+  <div id="deck">
+
+    <!-- S1: タイトル -->
+    <div class="slide active" id="s1">
+      <h1 class="s1-title">発酵食品は<br><em>なぜおいしいのか？</em></h1>
+      <p class="slide-sub">〜 酵素の働きを探る 10分間サイエンス 〜</p>
+      <div class="food-row">
+        <div class="food-item"><span class="food-em">🍱</span><span class="food-lbl">味噌</span></div>
+        <div class="food-item"><span class="food-em">🫘</span><span class="food-lbl">納豆</span></div>
+        <div class="food-item"><span class="food-em">🧀</span><span class="food-lbl">チーズ</span></div>
+        <div class="food-item"><span class="food-em">🥛</span><span class="food-lbl">ヨーグルト</span></div>
+      </div>
+      <div class="info-box">
+        これらの食品に共通するのは「<strong>発酵</strong>」という化学変化。<br>
+        でも、なぜ味が変わるのか——そのしくみを理解しよう。
+      </div>
+    </div>
+
+    <!-- S2: 問い -->
+    <div class="slide" id="s2">
+      <h2 class="slide-title">🤔 考えてみよう</h2>
+      <p class="slide-sub">味噌の原材料は、たったこれだけ</p>
+      <div class="ing-row">
+        <div class="ing-box"><span class="ing-em">🫘</span><span class="ing-lbl">大豆</span></div>
+        <span class="plus">＋</span>
+        <div class="ing-box"><span class="ing-em">🍚</span><span class="ing-lbl">米</span></div>
+        <span class="plus">＋</span>
+        <div class="ing-box"><span class="ing-em">🧂</span><span class="ing-lbl">塩</span></div>
+      </div>
+      <div class="big-arrow">↓</div>
+      <div class="ing-row" style="margin:0">
+        <div class="ing-box" style="border-color:var(--blue);background:var(--blue-bg);">
+          <span class="ing-em">🍱</span>
+          <span class="ing-lbl" style="color:var(--blue);">味噌</span>
+        </div>
+      </div>
+      <div style="height:clamp(8px,1.3vh,16px)"></div>
+      <div class="q-box">
+        <div style="font-size:clamp(26px,3.8vw,40px)">❓</div>
+        <p class="q-text">大豆・米・塩だけなのに、<br>なぜ「味噌」の味になるのだろう？</p>
+      </div>
+      <p class="q-hint">ヒント：味噌を作るとき、ある「生き物」が関わっている</p>
+    </div>
+
+    <!-- S3: 酵素と発酵の違い（新規） -->
+    <div class="slide" id="s3">
+      <h2 class="slide-title">🔑 まず整理しよう</h2>
+      <p class="slide-sub">「酵素」と「発酵」は別の概念——混同しないようにしよう</p>
+      <div class="concept-wrap">
+        <div class="concept-card blue">
+          <span class="concept-icon">🔬</span>
+          <div class="concept-title">酵素（Enzyme）</div>
+          <span class="concept-keyword">道具・触媒</span>
+          <p class="concept-def">生物が作る<strong>タンパク質</strong>の触媒。<br>
+            化学反応を速める働きをする。<br>
+            自分自身は変化せず、繰り返し使える。</p>
+        </div>
+        <div class="concept-card green">
+          <span class="concept-icon">🦠</span>
+          <div class="concept-title">発酵（Fermentation）</div>
+          <span class="concept-keyword">現象・プロセス</span>
+          <p class="concept-def">微生物の酵素が有機物を<br>
+            分解・変換する<strong>現象</strong>のこと。<br>
+            酵素は手段、発酵はその結果として起きる変化。</p>
+        </div>
+      </div>
+      <div style="font-size:clamp(12px,1.5vw,15px);color:var(--text2);font-weight:600;margin-bottom:clamp(8px,1.2vh,13px)">どんな関係？</div>
+      <div class="rel-flow">
+        <div class="rel-node" style="border-color:var(--green);background:var(--green-bg)">
+          <span class="rel-node-em">🦠</span>
+          <span class="rel-node-lbl" style="color:var(--green)">微生物</span>
+        </div>
+        <span class="rel-arrow">→</span>
+        <div class="rel-node" style="border-color:var(--blue);background:var(--blue-bg)">
+          <span class="rel-node-em">🔬</span>
+          <span class="rel-node-lbl" style="color:var(--blue)">酵素が働く</span>
+        </div>
+        <span class="rel-arrow">→</span>
+        <div class="rel-node" style="border-color:var(--orange);background:var(--orange-bg)">
+          <span class="rel-node-em">⚡</span>
+          <span class="rel-node-lbl" style="color:var(--orange)">化学変化</span>
+        </div>
+        <span class="rel-arrow">→</span>
+        <div class="rel-node" style="border-color:var(--pink);background:var(--pink-bg)">
+          <span class="rel-node-em">🍱</span>
+          <span class="rel-node-lbl" style="color:var(--pink)">発酵食品</span>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:clamp(8px,1.2vh,14px)">
+        「発酵」という現象を起こしているのは微生物が持つ<strong>酵素</strong>。<br>
+        酵素なしに発酵は起きない。
+      </div>
+    </div>
+
+    <!-- S4: タンパク質 → ペプチド → アミノ酸（改善） -->
+    <div class="slide" id="s4">
+      <h2 class="slide-title">🫘 大豆タンパク質の変化</h2>
+      <p class="slide-sub">麹菌のプロテアーゼが段階的に分解する</p>
+      <div class="rx-flow" id="flow-protein">
+        <div class="rx-step">
+          <div class="mol-box mol-protein">
+            <span class="mol-em">🧬</span>
+            <div>
+              <div class="mol-lbl">タンパク質</div>
+              <div class="mol-sub">大きな分子・うま味を感じにくい</div>
+            </div>
+          </div>
+        </div>
+        <div class="rx-step">
+          <div class="enz-row">
+            <div class="enz-line"></div>
+            <div class="enz-badge">🔬 プロテアーゼ（酵素）</div>
+            <div class="enz-line"></div>
+          </div>
+          <div class="enz-sub">麹菌（Aspergillus oryzae）が分泌・まず鎖を切断</div>
+        </div>
+        <div class="rx-step">
+          <div class="mol-box mol-peptide">
+            <span class="mol-em">🔗</span>
+            <div>
+              <div class="mol-lbl">ペプチド</div>
+              <div class="mol-sub">中間体・アミノ酸がいくつか連なった状態</div>
+            </div>
+          </div>
+        </div>
+        <div class="rx-step">
+          <div class="enz-row">
+            <div class="enz-line"></div>
+            <div class="enz-badge" style="background:var(--pink)">🔬 プロテアーゼ（さらに分解）</div>
+            <div class="enz-line"></div>
+          </div>
+          <div class="enz-sub">結合をさらに切断してアミノ酸1個に</div>
+        </div>
+        <div class="rx-step">
+          <div class="mol-box mol-amino">
+            <span class="mol-em">✨</span>
+            <div>
+              <div class="mol-lbl">アミノ酸（グルタミン酸など）</div>
+              <div class="mol-sub">小さな分子・舌の受容体で感知できる</div>
+            </div>
+          </div>
+          <div class="taste-badge taste-umami">→ うま味 🌟</div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:clamp(7px,1vh,13px)">
+        <strong>触媒のポイント：</strong>プロテアーゼは反応の前後で変化しない。
+        同じ酵素分子が繰り返し働き続ける。
+      </div>
+    </div>
+
+    <!-- S5: デンプン → デキストリン → グルコース（改善） -->
+    <div class="slide" id="s5">
+      <h2 class="slide-title">🍚 米デンプンの変化</h2>
+      <p class="slide-sub">麹菌のアミラーゼが段階的に分解する</p>
+      <div class="rx-flow" id="flow-starch">
+        <div class="rx-step">
+          <div class="mol-box mol-starch">
+            <span class="mol-em">🔗</span>
+            <div>
+              <div class="mol-lbl">デンプン</div>
+              <div class="mol-sub">長い鎖状の多糖・甘くない</div>
+            </div>
+          </div>
+        </div>
+        <div class="rx-step">
+          <div class="enz-row">
+            <div class="enz-line"></div>
+            <div class="enz-badge" style="background:var(--orange)">🔬 α-アミラーゼ（酵素）</div>
+            <div class="enz-line"></div>
+          </div>
+          <div class="enz-sub">麹菌が分泌・デンプンの鎖をランダムに切断</div>
+        </div>
+        <div class="rx-step">
+          <div class="mol-box mol-dextrin">
+            <span class="mol-em">〰️</span>
+            <div>
+              <div class="mol-lbl">デキストリン・マルトース</div>
+              <div class="mol-sub">中間体・鎖が短くなった状態</div>
+            </div>
+          </div>
+        </div>
+        <div class="rx-step">
+          <div class="enz-row">
+            <div class="enz-line"></div>
+            <div class="enz-badge" style="background:var(--orange)">🔬 グルコアミラーゼ（酵素）</div>
+            <div class="enz-line"></div>
+          </div>
+          <div class="enz-sub">端からグルコースを切り出す</div>
+        </div>
+        <div class="rx-step">
+          <div class="mol-box mol-sugar">
+            <span class="mol-em">🍬</span>
+            <div>
+              <div class="mol-lbl">グルコース（ブドウ糖）</div>
+              <div class="mol-sub">最小単位の糖・甘い！</div>
+            </div>
+          </div>
+          <div class="taste-badge taste-sweet">→ 甘味 🍯</div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:clamp(7px,1vh,13px)">
+        <strong>基質特異性：</strong>アミラーゼはデンプンの結合だけを認識して分解する。
+        タンパク質や脂質は分解できない——酵素ごとに「働ける相手」が決まっている。
+      </div>
+    </div>
+
+    <!-- S6: なぜおいしくなるのか（新規） -->
+    <div class="slide" id="s6">
+      <h2 class="slide-title">😋 なぜおいしく感じるのか？</h2>
+      <p class="slide-sub">分解で生まれた小さな分子が、それぞれの「味」を作る</p>
+      <div class="taste-intro">
+        大きな分子（タンパク質・デンプン）は<span>味を感じにくい</span>。<br>
+        小さな分子になって初めて、舌の受容体で感知できる。
+      </div>
+      <div class="taste-grid">
+        <div class="taste-card umami">
+          <span class="t-icon">🌟</span>
+          <div class="t-body">
+            <div class="t-name">うま味</div>
+            <div class="t-chem">グルタミン酸・イノシン酸</div>
+            <div class="t-ex">タンパク質が分解されて生まれる。昆布だし・かつお節のあの深み。味噌・チーズ・納豆のコク。</div>
+          </div>
+        </div>
+        <div class="taste-card sweet">
+          <span class="t-icon">🍯</span>
+          <div class="t-body">
+            <div class="t-name">甘味</div>
+            <div class="t-chem">グルコース・マルトース</div>
+            <div class="t-ex">デンプンが分解されて生まれる。甘酒・味噌のまろやかな甘さ。</div>
+          </div>
+        </div>
+        <div class="taste-card sour">
+          <span class="t-icon">🍋</span>
+          <div class="t-body">
+            <div class="t-name">酸味</div>
+            <div class="t-chem">乳酸・酢酸・クエン酸</div>
+            <div class="t-ex">微生物の代謝で生まれる有機酸。ヨーグルト・チーズの爽やかな酸味。保存性も高める。</div>
+          </div>
+        </div>
+        <div class="taste-card aroma">
+          <span class="t-icon">🌸</span>
+          <div class="t-body">
+            <div class="t-name">香り</div>
+            <div class="t-chem">エステル・アルコール類など</div>
+            <div class="t-ex">発酵中に生まれる揮発性成分。味噌の香り・チーズの芳香。香りも「おいしさ」の大事な要素。</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box">
+        味・香り・食感のすべてが<strong>酵素による化学変化</strong>から生まれる——これが発酵食品の正体。
+      </div>
+    </div>
+
+    <!-- S7: チーズとヨーグルトの仕組みの違い（再設計） -->
+    <div class="slide" id="s7">
+      <h2 class="slide-title">🥛 チーズとヨーグルト——固まる仕組みの違い</h2>
+      <p class="slide-sub">同じ牛乳から作られるのに、なぜこんなに違うのか？答えは「固まる原因」にある</p>
+      <div class="mech-compare">
+
+        <!-- チーズ -->
+        <div class="mech-panel cheese">
+          <div class="mech-panel-hdr">🧀 チーズ（固体）</div>
+          <div class="mech-panel-key">✂️ 酵素で「切って」固める</div>
+          <div class="mech-panel-flow">
+            <div class="mech-step-lbl">κ-カゼイン（乳タンパク質）</div>
+            <div class="mech-step-arrow">キモシン（レンネットの酵素）が<br>κ-カゼインを直接切断</div>
+            <div class="mech-step-lbl">カゼインミセルが不安定化・凝集</div>
+            <div class="mech-step-arrow">圧搾・成形してカード（凝乳）が固体に</div>
+            <div class="mech-result-lbl">🧀 固体のチーズ完成</div>
+            <div class="mech-note">
+              熟成中にプロテアーゼ・リパーゼが働き<br>
+              ペプチド・アミノ酸・脂肪酸が増え<br>
+              <strong style="color:var(--orange)">うま味・コク・独特の香りが生まれる</strong>
+            </div>
+          </div>
+          <div class="mech-panel-footer">
+            🦠 乳酸菌は酸性化を補助。カビ・細菌の種類でチーズの風味が変わる。
+          </div>
+        </div>
+
+        <div class="mech-vs">vs</div>
+
+        <!-- ヨーグルト -->
+        <div class="mech-panel yogurt">
+          <div class="mech-panel-hdr">🍶 ヨーグルト（半固体）</div>
+          <div class="mech-panel-key">🍋 酸でpHを下げて固める</div>
+          <div class="mech-panel-flow">
+            <div class="mech-step-lbl">乳糖（ラクトース）</div>
+            <div class="mech-step-arrow">乳酸菌の酵素が乳酸に変換<br>（細胞内での代謝）</div>
+            <div class="mech-step-lbl">pH が 4.6（等電点）まで低下</div>
+            <div class="mech-step-arrow">カゼインの電荷が中和・自然に凝集</div>
+            <div class="mech-result-lbl">🍶 ゲル状（半固体）完成</div>
+            <div class="mech-note">
+              一部タンパク質も分解されまろやかな風味が生まれる。<br>
+              <strong style="color:var(--green)">酸味はこの乳酸が作る。<br>キモシンは使わない。</strong>
+            </div>
+          </div>
+          <div class="mech-panel-footer">
+            🦠 乳酸菌（Lactobacillus 属など）のみで製造する。
+          </div>
+        </div>
+
+      </div>
+      <div class="diff-note" style="margin-top:clamp(8px,1.2vh,14px)">
+        💡 チーズは<strong>酵素（キモシン）がタンパク質を直接切断</strong>して固まる。ヨーグルトは<strong>乳酸によるpH変化でタンパク質が自然凝集</strong>してゲル化する。どちらも「固まる」が、化学的なしくみはまったく異なる。
+      </div>
+    </div>
+
+    <!-- S8: 納豆（新規） -->
+    <div class="slide" id="s8">
+      <h2 class="slide-title">🫘 納豆でも同じことが起きている</h2>
+      <p class="slide-sub">原料は大豆だけ——納豆菌の酵素が味を作る</p>
+      <div class="rx-flow" id="flow-natto">
+        <div class="rx-step">
+          <div class="mol-box mol-protein">
+            <span class="mol-em">🫘</span>
+            <div>
+              <div class="mol-lbl">大豆タンパク質</div>
+              <div class="mol-sub">大きな分子・うま味を感じにくい</div>
+            </div>
+          </div>
+        </div>
+        <div class="rx-step">
+          <div class="enz-row">
+            <div class="enz-line"></div>
+            <div class="enz-badge">🔬 納豆菌のプロテアーゼ</div>
+            <div class="enz-line"></div>
+          </div>
+          <div class="enz-sub">Bacillus subtilis var. natto が分泌</div>
+        </div>
+        <div class="rx-step">
+          <div class="mol-box mol-amino">
+            <span class="mol-em">✨</span>
+            <div>
+              <div class="mol-lbl">アミノ酸（グルタミン酸など）</div>
+              <div class="mol-sub">小さな分子・うま味成分が増加</div>
+            </div>
+          </div>
+          <div class="taste-badge taste-umami">→ 独特のうま味・風味 🌟</div>
+        </div>
+      </div>
+      <div style="margin-top:clamp(10px,1.5vh,18px);font-size:clamp(12px,1.5vw,15px);font-weight:700;color:var(--text2);text-align:center;">
+        同じ原理——違うのは「使う微生物」だけ
+      </div>
+      <div class="natto-foods">
+        <div class="natto-food-chip">🍱 味噌<span style="color:var(--text3);font-size:0.85em;margin-left:3px">麹菌</span></div>
+        <div class="natto-food-chip">🫘 納豆<span style="color:var(--text3);font-size:0.85em;margin-left:3px">納豆菌</span></div>
+        <div class="natto-food-chip">🧀 チーズ<span style="color:var(--text3);font-size:0.85em;margin-left:3px">乳酸菌・カビ</span></div>
+        <div class="natto-food-chip">🍶 ヨーグルト<span style="color:var(--text3);font-size:0.85em;margin-left:3px">乳酸菌</span></div>
+      </div>
+      <div class="info-box" style="margin-top:clamp(8px,1.2vh,14px)">
+        微生物の種類が変われば酵素の種類も変わる。<br>
+        だから<strong>味・香り・食感</strong>がまったく異なる食品になる——でも原理は同じ。
+      </div>
+    </div>
+
+    <!-- S9: 投票 -->
+    <div class="slide" id="s9">
+      <div style="font-size:clamp(52px,8.5vw,90px);margin-bottom:5px">🫘</div>
+      <p class="poll-q">納豆は立派な<em>発酵食品</em>だ。<br>でも——みんながおいしいと思うだろうか？</p>
+      <div class="poll-btns" id="pollBtns">
+        <button class="poll-btn yum"  id="btnYum"><span class="bem">😋</span>おいしい</button>
+        <button class="poll-btn nope" id="btnNope"><span class="bem">😅</span>苦手…</button>
+      </div>
+      <div style="font-size:clamp(10px,1.2vw,12px);color:var(--text3);text-align:center;margin-bottom:clamp(6px,1vh,10px);font-weight:500">
+        ※ 以下の結果はデモ用の仮データです。実際のクラスの集計ではありません。
+      </div>
+      <div class="poll-res" id="pollRes">
+        <div class="res-row">
+          <div class="res-lbl">😋 おいしい</div>
+          <div class="res-track"><div class="res-bar yum-bar" id="yumBar"></div></div>
+          <div class="res-pct" id="yumPct">0%</div>
+        </div>
+        <div class="res-row">
+          <div class="res-lbl">😅 苦手</div>
+          <div class="res-track"><div class="res-bar nope-bar" id="nopBar"></div></div>
+          <div class="res-pct" id="nopPct">0%</div>
+        </div>
+        <p class="poll-note" id="pollNote"></p>
+      </div>
+    </div>
+
+    <!-- S10: まとめ（因果連鎖） -->
+    <div class="slide" id="s10">
+      <h2 class="slide-title">📝 まとめ</h2>
+      <p class="slide-sub">発酵食品がおいしくなる理由——因果関係を整理しよう</p>
+      <div class="sum-chain">
+        <div class="chain-node node-blue">
+          <span class="chain-icon">🦠</span>
+          <div class="chain-body">
+            <div class="chain-main">微生物が食品の中で働く</div>
+            <div class="chain-sub">麹菌・乳酸菌・納豆菌・酵母など</div>
+          </div>
+        </div>
+        <div class="chain-conn"></div>
+        <div class="chain-node node-orange">
+          <span class="chain-icon">🔬</span>
+          <div class="chain-body">
+            <div class="chain-main">酵素が大きな分子に作用する</div>
+            <div class="chain-sub">プロテアーゼ・アミラーゼ・リパーゼ（触媒・繰り返し使える）</div>
+          </div>
+        </div>
+        <div class="chain-conn"></div>
+        <div class="chain-node node-purple">
+          <span class="chain-icon">⚡</span>
+          <div class="chain-body">
+            <div class="chain-main">大きな分子 → 小さな分子へ分解</div>
+            <div class="chain-sub">タンパク質→アミノ酸　デンプン→糖　脂肪→脂肪酸＋有機酸</div>
+          </div>
+        </div>
+        <div class="chain-conn"></div>
+        <div class="chain-node node-green">
+          <span class="chain-icon">✨</span>
+          <div class="chain-body">
+            <div class="chain-main">うま味・甘味・酸味・香りが生まれる</div>
+            <div class="chain-sub">小さな分子が舌や鼻の受容体で感知される</div>
+          </div>
+        </div>
+        <div class="chain-conn"></div>
+        <div class="chain-node node-pink">
+          <span class="chain-icon">😋</span>
+          <div class="chain-body">
+            <div class="chain-main">人はおいしいと感じる</div>
+            <div class="chain-sub">ただし「おいしい」かどうかは文化・経験・個人差がある</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:clamp(9px,1.3vh,16px)">
+        科学は「何が起きているか」を説明できる。<br>
+        <strong>でも「おいしい」と感じるのは、あなた自身だ。</strong>
+      </div>
+    </div>
+
+  </div><!-- #deck -->
+
+  <nav id="nav">
+    <button class="nav-btn" id="prevBtn" disabled>◀ 前へ</button>
+    <span id="slide-counter">1 / 10</span>
+    <button class="nav-btn next" id="nextBtn">次へ ▶</button>
+  </nav>
+
+</div><!-- #wrapper -->
+
+<script>
+(function(){
+  var N   = 10;
+  var cur = 0;
+  var voted = false;
+  var votes = {yum:0,nope:0};
+
+  /* ---- ドット生成 ---- */
+  var dotsEl = document.getElementById('dots');
+  for(var i=0;i<N;i++){
+    var d = document.createElement('div');
+    d.className = 'dot'+(i===0?' active':'');
+    (function(idx){ d.addEventListener('click', function(){ jump(idx); }); })(i);
+    dotsEl.appendChild(d);
+  }
+
+  function allSlides(){ return document.querySelectorAll('.slide'); }
+
+  /* ---- ジャンプ（ドット用） ---- */
+  function jump(idx){
+    if(idx<0||idx>=N||idx===cur) return;
+    var ss = allSlides();
+    ss[cur].classList.remove('active');
+    ss[cur].classList.add('exit-l');
+    (function(prev){ setTimeout(function(){ ss[prev].classList.remove('exit-l'); },420); })(cur);
+    cur = idx;
+    ss[cur].classList.add('active');
+    sync(); onEnter(cur);
+  }
+
+  /* ---- 前後移動 ---- */
+  function go(dir){
+    var nxt = cur+dir;
+    if(nxt<0||nxt>=N) return;
+    var ss   = allSlides();
+    var outS = ss[cur];
+    var inS  = ss[nxt];
+    cur = nxt;
+
+    if(dir > 0){
+      outS.classList.remove('active');
+      outS.classList.add('exit-l');
+      setTimeout(function(){ outS.classList.remove('exit-l'); }, 420);
+      inS.classList.add('active');
+    } else {
+      outS.classList.remove('active');
+      inS.style.transition = 'none';
+      inS.style.transform  = 'translateX(-100%)';
+      inS.style.opacity    = '0';
+      inS.classList.add('active');
+      void inS.offsetWidth;
+      inS.style.removeProperty('transition');
+      inS.style.removeProperty('transform');
+      inS.style.removeProperty('opacity');
+    }
+    sync(); onEnter(cur);
+  }
+
+  /* ---- ボタンバインド（touchend + click 二重発火防止） ---- */
+  function bindBtn(id, dir){
+    var btn = document.getElementById(id);
+    var fired = false;
+    btn.addEventListener('touchend', function(e){
+      e.preventDefault();
+      if(btn.disabled) return;
+      fired = true;
+      go(dir);
+      setTimeout(function(){ fired=false; }, 500);
+    }, {passive:false});
+    btn.addEventListener('click', function(){
+      if(!fired && !btn.disabled) go(dir);
+    });
+  }
+  bindBtn('prevBtn',-1);
+  bindBtn('nextBtn', 1);
+
+  /* ---- UI 同期 ---- */
+  function sync(){
+    document.getElementById('prevBtn').disabled = (cur===0);
+    document.getElementById('nextBtn').disabled = (cur===N-1);
+    document.getElementById('slide-counter').textContent = (cur+1)+' / '+N;
+    var dots = document.querySelectorAll('.dot');
+    for(var i=0;i<dots.length;i++) dots[i].classList.toggle('active', i===cur);
+  }
+
+  /* ---- アニメーション ---- */
+  function animFlow(id){
+    var steps = document.querySelectorAll('#'+id+' .rx-step');
+    for(var i=0;i<steps.length;i++) steps[i].classList.remove('vis');
+    (function(ss){
+      for(var i=0;i<ss.length;i++){
+        (function(s,delay){ setTimeout(function(){ s.classList.add('vis'); }, delay); })(ss[i], 120+i*340);
+      }
+    })(steps);
+  }
+
+  function onEnter(idx){
+    if(idx===3) animFlow('flow-protein');
+    if(idx===4) animFlow('flow-starch');
+    if(idx===7) animFlow('flow-natto');
+  }
+
+  /* ---- 投票 ---- */
+  function bindPoll(id, choice){
+    var btn = document.getElementById(id);
+    var f = false;
+    btn.addEventListener('touchend', function(e){
+      e.preventDefault();
+      if(voted||f) return; f=true;
+      vote(choice);
+      setTimeout(function(){ f=false; },500);
+    },{passive:false});
+    btn.addEventListener('click', function(){
+      if(!f&&!voted) vote(choice);
+    });
+  }
+  bindPoll('btnYum','yum');
+  bindPoll('btnNope','nope');
+
+  function vote(c){
+    if(voted) return; voted=true;
+    votes[c]++;
+    if(c==='yum'){ votes.yum+=Math.floor(Math.random()*8)+10; votes.nope+=Math.floor(Math.random()*5)+4; }
+    else          { votes.yum+=Math.floor(Math.random()*7)+7;  votes.nope+=Math.floor(Math.random()*6)+6; }
+    var tot=votes.yum+votes.nope;
+    var yp=Math.round(votes.yum/tot*100), np=100-yp;
+    document.querySelector('.poll-btn.'+c).classList.add('sel');
+    var res=document.getElementById('pollRes'); res.classList.add('show');
+    setTimeout(function(){
+      document.getElementById('yumBar').style.width=yp+'%';
+      document.getElementById('nopBar').style.width=np+'%';
+      document.getElementById('yumPct').textContent=yp+'%';
+      document.getElementById('nopPct').textContent=np+'%';
+    },200);
+    document.getElementById('pollNote').innerHTML=
+      '💡 クラスの結果を見てみよう。<br>'+
+      '納豆は<strong>発酵</strong>によって酵素が大豆タンパク質を分解し、アミノ酸が増えている。<br>'+
+      'でも「おいしい」かどうかは、<strong>文化・経験・個人差</strong>によって異なる。<br>'+
+      '科学的事実と、感じ方は別のことだ。';
+  }
+
+  /* ---- スワイプ ---- */
+  var tx=0, ty=0;
+  document.getElementById('deck').addEventListener('touchstart',function(e){ tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
+  document.getElementById('deck').addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>30) go(dx<0?1:-1);
+  },{passive:true});
+
+  /* ---- キーボード ---- */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp')    go(-1);
+  });
+
+  /* S/O キー無効化（iPad不要機能） */
+  document.addEventListener('keydown', function(e){
+    if(e.key==='s'||e.key==='S'||e.key==='o'||e.key==='O') e.stopImmediatePropagation();
+  }, true);
+
+  sync();
+})();
+</script>
+</body>
+</html>
